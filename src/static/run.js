@@ -1,22 +1,21 @@
-var Game = require ('game-of-life');
-var size = 400;
-var density = 0.8;
+var size = 100;
+var density = 0.3;
 
-var grid = new Game.Grid();
+var grid = new Grid();
 
 function addOrNot(density){
-	if (Math.random()>density)
-		return false;
-	return true;
+  if (Math.random()>density)
+    return false;
+  return true;
 }
 
 function make_grid(){
-	for (var i=0;i<size;i++){
-		for (var j=0;j<size;j++){
-			var randomStatus = addOrNot(density);
-			grid.addCell(new Game.Cell(i,j,randomStatus));
-		}
-	}
+  for (var i=0;i<=size;i++){
+    for (var j=0;j<=size;j++){
+      var randomStatus = addOrNot(density);
+      grid.addCell(new Cell(i,j,randomStatus));
+    }
+  }
 }
 
 function canvasGrid(){
@@ -26,13 +25,25 @@ function canvasGrid(){
   for(var i =0;i<size;i++){
      for(var j=0;j<size;j++){
        if (grid.getCell(i,j).status){
-          context.fillStyle= "Black";
-          context.fillRect(i,j,1,1);
+          context.fillStyle= "Red";
+          context.fillRect(i*4,j*4,4,4);
           console.log(i,j);
        }
      }
   }
 }
 
-make_grid();
-canvasGrid();
+function onrepeat(){
+  grid.updateGrid();
+  canvasGrid();
+  requestAnimationFrame(onrepeat);
+}
+
+
+function init(){  
+  make_grid();
+  canvasGrid();
+  onrepeat();
+}
+
+init();
